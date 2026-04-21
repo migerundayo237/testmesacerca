@@ -28,6 +28,7 @@ export function mapFirebaseAuthError(code: string): string {
     case "auth/user-not-found":
       return "No existe una cuenta asociada a este correo.";
     case "auth/wrong-password":
+      return "La contraseña es incorrecta.";
     case "auth/invalid-credential":
       return "Correo o contraseña incorrectos.";
     case "auth/email-already-in-use":

@@ -83,6 +83,8 @@ function toAuthUser(fb: FirebaseUser, profile: UserProfile | null): AuthUser {
  * Los componentes capturan este error y lo muestran al usuario.
  */
 function rethrowMapped(err: unknown): never {
+  console.log("FULL ERROR:", err);
+  console.log("ERROR CODE:", (err as any)?.code);
   const code = (err as { code?: string })?.code ?? "";
   const message = code
     ? mapFirebaseAuthError(code)

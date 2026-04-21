@@ -141,12 +141,22 @@ export function ProfilePage() {
       setPasswordData({ current: "", new: "", confirm: "" });
       setShowChangePassword(false);
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "No se pudo actualizar la contraseña",
-      });
+        const errorMessage = err instanceof Error ? err.message : "No se pudo actualizar la contraseña";
+        // 👇 If it's wrong current password → show under field
+        if (errorMessage.toLowerCase().includes("contraseña actual")) {
+          setPasswordErrors((prev) => ({
+          ...prev,
+          current: errorMessage,
+        }));
+        } else {
+        // 👇 Other errors still go to the top
+          setMessage({
+            type: "error",
+            text: errorMessage,
+          });
+        }
     } finally {
-      setIsChangingPassword(false);
+        setIsChangingPassword(false);
     }
   };
 
