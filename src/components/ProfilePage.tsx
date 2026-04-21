@@ -117,6 +117,8 @@ export function ProfilePage() {
     } else if (!PASSWORD_REGEX.test(passwordData.new)) {
       errors.new =
         "Mínimo 8 caracteres con mayúscula, minúscula, número y carácter especial";
+    } else if (passwordData.new === passwordData.current) {
+        errors.new = "La nueva contraseña no puede ser igual a la actual";
     }
     if (passwordData.new !== passwordData.confirm) {
       errors.confirm = "Las contraseñas no coinciden";
@@ -141,22 +143,11 @@ export function ProfilePage() {
       setPasswordData({ current: "", new: "", confirm: "" });
       setShowChangePassword(false);
     } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "No se pudo actualizar la contraseña";
-        // 👇 If it's wrong current password → show under field
-        if (errorMessage.toLowerCase().includes("contraseña actual")) {
-          setPasswordErrors((prev) => ({
-          ...prev,
-          current: errorMessage,
-        }));
-        } else {
-        // 👇 Other errors still go to the top
-          setMessage({
-            type: "error",
-            text: errorMessage,
-          });
-        }
+      setPasswordErrors({
+        current: err instanceof Error ? err.message : "No se pudo actualizar la contraseña",
+      });
     } finally {
-        setIsChangingPassword(false);
+      setIsChangingPassword(false);
     }
   };
 

@@ -84,11 +84,15 @@ function toAuthUser(fb: FirebaseUser, profile: UserProfile | null): AuthUser {
  */
 function rethrowMapped(err: unknown): never {
   console.log("FULL ERROR:", err);
-  console.log("ERROR CODE:", (err as any)?.code);
-  const code = (err as { code?: string })?.code ?? "";
+  console.log("ERROR CODE:", (err as any)?.code);       
+  const code =
+    (err as { code?: string })?.code ??
+    // Firebase sometimes embeds the code inside the message string
+    (err as Error)?.message?.match(/\(([^)]+)\)/)?.[1] ??
+    "";
   const message = code
     ? mapFirebaseAuthError(code)
-    : (err as Error)?.message ?? "Error inesperado";
+    : "Error inesperado";
   throw new Error(message);
 }
 

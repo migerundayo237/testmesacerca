@@ -30,7 +30,7 @@ export function mapFirebaseAuthError(code: string): string {
     case "auth/wrong-password":
       return "La contraseña es incorrecta.";
     case "auth/invalid-credential":
-      return "Correo o contraseña incorrectos.";
+      return "La contraseña actual es incorrecta.";
     case "auth/email-already-in-use":
       return "Este correo ya está registrado.";
     case "auth/weak-password":
