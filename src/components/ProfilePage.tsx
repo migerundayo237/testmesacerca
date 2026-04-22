@@ -52,6 +52,8 @@ export function ProfilePage() {
     null,
   );
 
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   // ProtectedRoute ya garantiza que haya usuario, pero mantenemos el guard
   // por si el componente se monta en algún flujo no envuelto.
   if (!user) {
@@ -169,12 +171,9 @@ export function ProfilePage() {
       // Redirigimos a una pantalla pública.
       navigate("/login");
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "No se pudo eliminar la cuenta",
-      });
+        setDeleteError(err instanceof Error ? err.message : "No se pudo eliminar la cuenta");
     } finally {
-      setIsDeletingAccount(false);
+        setIsDeletingAccount(false);
     }
   };
 
@@ -474,6 +473,7 @@ export function ProfilePage() {
               onClick={() => {
                 setShowDeleteAccount(!showDeleteAccount);
                 setDeletePasswordConfirm("");
+                setDeleteError(null);
                 setMessage(null);
               }}
               disabled={isDeletingAccount}
@@ -507,7 +507,12 @@ export function ProfilePage() {
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-slate-50"
                 />
               </div>
-
+              {deleteError && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                {deleteError}
+                </p>
+              )}
               <button
                 type="submit"
                 disabled={isDeletingAccount}
